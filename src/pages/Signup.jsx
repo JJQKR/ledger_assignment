@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { register } from "../lib/api/auth";
+import styled from "styled-components";
 
 const Container = styled.div`
   max-width: 400px;
@@ -53,22 +55,38 @@ const Signup = () => {
   const nagivate = useNavigate();
 
   const handleRegister = async () => {
+    //유효성검사
     if (id.length < 4 || id.length > 10) {
       alert("아이디는 최소 4글자, 최대 9글자로 작성해주세요.");
       return;
     }
-    //api호출 전에 위에서 유효성 검증 해줌
-    //api 호출을 진짜로 하는 아래 부분
-    console.log("회원가입 API호출!");
-
     if (password.length < 4 || password.length > 15) {
       alert("비밀번호는 최소 4글자, 최대 14글자로 작성해주세요.");
       return;
     }
-
     if (nickname.length < 2 || nickname.length > 10) {
       alert("아이디는 최소 2글자, 최대 9글자로 작성해주세요.");
       return;
+    }
+
+    //api호출 전에 위에서 유효성 검증 해줌
+
+    //api 호출을 진짜로 하는 아래 부분
+
+    const response = await register({
+      //async 함수이므로 여기서 호출시에도 await 걸어줌
+      id: id, //두번째가 state로 관리되는 id
+      password: password, //두번쨰가 state로 관리되는 password
+      nickname: nickname, //두번째가 state로 관리되는 nickname
+    });
+
+    console.log("회원가입 API 응답값 : ", response);
+    //왜 여기서 굳이 response로 받아주지?
+    //쓰려고?
+
+    if (response) {
+      confirm("회원가입이 완료되었습니다.");
+      nagivate("/login");
     }
   };
 

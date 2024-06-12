@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { login } from "../lib/api/auth";
 
 const Container = styled.div`
   max-width: 400px;
@@ -51,11 +52,15 @@ const Login = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const nagivate = useNavigate();
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log(id);
     console.log(password);
     //아직 api 데이터 없으므로
     //우선 출력만 해주는 로직을 써놓는다
+    const response = await login({ id: id, password: password });
+    //id, password로 써도 된다고 prettier에서 경고 보낼지도?
+    //근데 auth에서도 축약해도 되나?
+    console.log("로그인 API 응답값 : ", response);
   };
 
   return (
