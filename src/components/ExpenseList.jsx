@@ -1,6 +1,9 @@
 import { Section } from "../pages/Home";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useQueries } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { getExpenses } from "../lib/api/expense";
 
 const NoExpenseMessage = styled.div`
   text-align: center;
@@ -69,8 +72,17 @@ const ExpenseDetails = styled.div`
   }
 `;
 
-export default function ExpenseList({ expenses }) {
+export default function ExpenseList() {
+  // 탠스택쿼리 사용하므로 ({expenses}) 파라미터를 더이상 여기서 가져오지 않음
   const navigate = useNavigate();
+  const {
+    data: expenses = [],
+    isLoading,
+    error,
+  } = useQuery({ queryKey: ["expense"], queryFn: getExpenses() });
+
+  console.log("isLoading : ", isLoading);
+  console.log("expense : ", expenses);
 
   return (
     <Section>

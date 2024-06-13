@@ -48,19 +48,23 @@ const ToggleButton = styled.button`
   cursor: pointer;
 `;
 
-const Login = () => {
+const Login = ({ setUser }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const nagivate = useNavigate();
   const handleLogin = async () => {
-    console.log(id);
-    console.log(password);
-    //아직 api 데이터 없으므로
-    //우선 출력만 해주는 로직을 써놓는다
-    const response = await login({ id: id, password: password });
+    const { userId, nickname, avatar } = await login({
+      id: id,
+      password: password,
+      //auth의 login 함수에서 id, password가 넣어주는 값인 건 알겠는데
+      //여기서 매개변수로도 필요한 이유 모르겠음
+    });
     //id, password로 써도 된다고 prettier에서 경고 보낼지도?
     //근데 auth에서도 축약해도 되나?
     console.log("로그인 API 응답값 : ", response);
+    alert("로그인 성공!");
+    setUser({ userId, nickname, avatar });
+    navigate("/");
   };
 
   return (
@@ -87,7 +91,7 @@ const Login = () => {
             placeholder="비밀번호"
           ></input>
         </InputGroup>
-        <Button onChange={(e) => {}}>로그인</Button>
+        <Button onChange={handleLogin}>로그인</Button>
         <ToggleButton
           onClick={(e) => {
             nagivate("/signup");
