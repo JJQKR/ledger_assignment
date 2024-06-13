@@ -51,6 +51,7 @@ export default function Profile({ user, setUser }) {
     console.log("이게 handleUpdateProfile의 reponse다!!!!!!!!!!", response);
 
     if (response.success) {
+      //이 success는 오류 내다가 이제 안 내기로 했나봄?????????????????????
       setUser({
         ...user,
         nickname: response.nickname,

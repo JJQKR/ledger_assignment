@@ -78,7 +78,7 @@ export default function ExpenseList() {
     data: expenses = [],
     isLoading,
     error,
-  } = useQuery({ queryKey: ["expense"], queryFn: getExpense() });
+  } = useQuery({ queryKey: ["expense"], queryFn: getExpense });
   //이게 캐시처리가 된다고 하면
   //데이터를 새롭게 집어넣더라도 우리가 지정해준 캐시타임 안쪽에서는 계속 이전의 데이터를 줄 것이다
   //근데 우리가 데이터를 쓰거나 추가하거나 삭제할 때 (CreateExpense의 invalidateQueries)

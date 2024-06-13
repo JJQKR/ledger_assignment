@@ -96,6 +96,15 @@
       "amount": 222222222,
       "description": "fdfdfdf",
       "createdBy": "yjcoyjco"
+    },
+    {
+      "id": "4df94ee0-2fea-4ac8-ae82-2f0e15f36e4e",
+      "month": 1,
+      "date": "2024-01-01",
+      "item": "콘솔이 찍혔으므로",
+      "amount": 777777777,
+      "description": "사이버 플렉스",
+      "createdBy": "yjcoyjco"
     }
   ]
 }
