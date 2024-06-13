@@ -1,9 +1,8 @@
 import { Section } from "../pages/Home";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useQueries } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { getExpenses } from "../lib/api/expense";
+import { getExpense } from "../lib/api/expense";
 
 const NoExpenseMessage = styled.div`
   text-align: center;
@@ -79,10 +78,19 @@ export default function ExpenseList() {
     data: expenses = [],
     isLoading,
     error,
-  } = useQuery({ queryKey: ["expense"], queryFn: getExpenses() });
+  } = useQuery({ queryKey: ["expense"], queryFn: getExpense() });
+  //이게 캐시처리가 된다고 하면
+  //데이터를 새롭게 집어넣더라도 우리가 지정해준 캐시타임 안쪽에서는 계속 이전의 데이터를 줄 것이다
+  //근데 우리가 데이터를 쓰거나 추가하거나 삭제할 때 (CreateExpense의 invalidateQueries)
+  //캐시처리된 데이터가 오면 안 되고 새로운 데이터가 와야함
 
   console.log("isLoading : ", isLoading);
   console.log("expense : ", expenses);
+
+  if (isLoading) {
+    return <div>Loading......</div>;
+  }
+  //여기 이상해
 
   return (
     <Section>

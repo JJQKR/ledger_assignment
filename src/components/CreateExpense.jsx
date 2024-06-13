@@ -2,8 +2,13 @@ import { Section } from "../pages/Home";
 import styled from "styled-components";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useDispatch } from "react-redux";
-import { addExpense } from "../redux/slices/expensesSlice";
+import { postExpense } from "../lib/api/expense";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const InputRow = styled.div`
   display: flex;
@@ -47,14 +52,32 @@ const AddButton = styled.button`
   }
 `;
 
-export default function CreateExpense({ month }) {
-  const dispatch = useDispatch();
+export default function CreateExpense({ user, month, expenses, setExpense }) {
   const [newDate, setNewDate] = useState(
     `2024-${String(month).padStart(2, "0")}-01`
   );
   const [newItem, setNewItem] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const queryClient = new QueryClient();
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: postExpense,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["expenses"]);
+      navigate(0);
+      //화면 새로고침하기
+    },
+  });
+
+  //이게 캐시처리가 된다고 하면
+  //데이터를 새롭게 집어넣더라도 우리가 지정해준 캐시타임 안쪽에서는 계속 이전의 데이터를 줄 것이다
+  //근데 우리가 데이터를 쓰거나 추가하거나 삭제할 때 (CreateExpense의 invalidateQueries)
+  //캐시처리된 데이터가 오면 안 되고 새로운 데이터가 와야함
+
+  //ExpenseList의 useQuery부분에 refetch를 사용하는 방법도 있지만
+  //우선 이렇게 한다
 
   const handleAddExpense = () => {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -76,9 +99,10 @@ export default function CreateExpense({ month }) {
       item: newItem,
       amount: parsedAmount,
       description: newDescription,
+      createdBy: user.userId,
     };
 
-    dispatch(addExpense(newExpense));
+    mutation.mutate(newExpense);
 
     setNewDate(`2024-${String(month).padStart(2, "0")}-01`);
     setNewItem("");

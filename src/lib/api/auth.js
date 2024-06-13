@@ -23,7 +23,7 @@ export const register = async ({ id, password, nickname }) => {
 export const login = async ({ id, password }) => {
   //매개변수 중괄호 안 쳐져있었는데 뭔 차이?
   try {
-    const response = await axios.post(AUTH_API_HOST + "/login?expiresIn10m", {
+    const response = await axios.post(AUTH_API_HOST + "/login?expiresIn30m", {
       id: id,
       password: password,
     });
@@ -58,7 +58,7 @@ export const updateProfile = async (formData) => {
     try {
       const response = await axios.patch(
         AUTH_API_HOST + "/profile",
-        { formData }, // <=formdata자리
+        formData,
         //Profile.jsx 리턴 부분 안 내용을 form으로 만든다고 하면
         // 버튼 눌렀을 때 formdata가 생성되게 할 수 있을 것이다.
 

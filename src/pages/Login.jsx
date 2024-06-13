@@ -10,7 +10,6 @@ const Container = styled.div`
   background-color: #b6d6f4;
   border-radius: 8px;
 `;
-
 const InputGroup = styled.div`
   margin-bottom: 15px;
   label {
@@ -37,7 +36,6 @@ const Button = styled.button`
     background-color: #808080ad;
   }
 `;
-
 const ToggleButton = styled.button`
   width: 100%;
   padding: 10px;
@@ -51,7 +49,7 @@ const ToggleButton = styled.button`
 const Login = ({ setUser }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const nagivate = useNavigate();
+  const navigate = useNavigate();
   const handleLogin = async () => {
     const { userId, nickname, avatar } = await login({
       id: id,
@@ -59,9 +57,7 @@ const Login = ({ setUser }) => {
       //auth의 login 함수에서 id, password가 넣어주는 값인 건 알겠는데
       //여기서 매개변수로도 필요한 이유 모르겠음
     });
-    //id, password로 써도 된다고 prettier에서 경고 보낼지도?
-    //근데 auth에서도 축약해도 되나?
-    console.log("로그인 API 응답값 : ", response);
+    console.log("로그인 API 응답값 : ", userId, nickname, avatar);
     alert("로그인 성공!");
     setUser({ userId, nickname, avatar });
     navigate("/");
@@ -91,7 +87,7 @@ const Login = ({ setUser }) => {
             placeholder="비밀번호"
           ></input>
         </InputGroup>
-        <Button onChange={handleLogin}>로그인</Button>
+        <Button onClick={handleLogin}>로그인</Button>
         <ToggleButton
           onClick={(e) => {
             nagivate("/signup");

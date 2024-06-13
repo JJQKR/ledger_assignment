@@ -42,13 +42,13 @@ export default function Profile({ user, setUser }) {
   const navigate = useNavigate();
 
   const handleUpdateProfile = async () => {
-    console.log(nickname);
-    console.log(nickname);
     const formData = new FormData();
     formData.append("nickname", nickname);
     formData.append("avatar", avatar);
     //명세서에 변경할 닉네임, 아바타 파일
     const response = await updateProfile(formData);
+    console.log("도대체formData가 뭔데?", formData);
+    console.log("이게 handleUpdateProfile의 reponse다!!!!!!!!!!", response);
 
     if (response.success) {
       setUser({
@@ -59,6 +59,7 @@ export default function Profile({ user, setUser }) {
       navigate("/");
     }
   };
+
   return (
     <>
       <Container>
@@ -79,7 +80,7 @@ export default function Profile({ user, setUser }) {
           <input
             type="file"
             accept="image"
-            onChange={(e) => setNickname(e.target.files[0])}
+            onChange={(e) => setAvatar(e.target.files[0])}
           />
         </InputGroup>
         <Button onClick={handleUpdateProfile}>프로필 업데이트</Button>

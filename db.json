@@ -69,6 +69,33 @@
       "description": "세광양대창",
       "createdBy": "Me",
       "userId": "4111207-5f9c-4e20-912f"
+    },
+    {
+      "id": "dce76c8f-87b1-491b-a29d-8dbbc4bb294e",
+      "month": 12,
+      "date": "2024-12-08",
+      "item": "선물",
+      "amount": 111111,
+      "description": "호떡",
+      "createdBy": "yjcoyjco"
+    },
+    {
+      "id": "b4f75661-e41c-473c-8b68-a94e3728efc2",
+      "month": 12,
+      "date": "2024-12-08",
+      "item": "성공기념선물",
+      "amount": 200,
+      "description": "붕어빵",
+      "createdBy": "yjcoyjco"
+    },
+    {
+      "id": "6170dce7-dc07-47fc-8de7-8cd6923d07f1",
+      "month": 2,
+      "date": "2024-02-24",
+      "item": "anjdd",
+      "amount": 222222222,
+      "description": "fdfdfdf",
+      "createdBy": "yjcoyjco"
     }
   ]
 }

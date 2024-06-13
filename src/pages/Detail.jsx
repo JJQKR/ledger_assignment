@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { editExpense, deleteExpense } from "../redux/slices/expensesSlice";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getExpense, putExpense, deleteExpense } from "../lib/api/expense";
 
 const Container = styled.div`
   max-width: 800px;
@@ -11,7 +11,6 @@ const Container = styled.div`
   background-color: #ffffff;
   border-radius: 16px;
 `;
-
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,12 +30,10 @@ const InputGroup = styled.div`
     font-size: 14px;
   }
 `;
-
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
 `;
-
 const Button = styled.button`
   padding: 10px 20px;
   background-color: ${(props) => (props.danger ? "#ff4d4d" : "#007bff")};
@@ -50,7 +47,6 @@ const Button = styled.button`
     background-color: ${(props) => (props.danger ? "#cc0000" : "#0056b3")};
   }
 `;
-
 const BackButton = styled(Button)`
   background-color: #6c757d;
 
@@ -61,18 +57,50 @@ const BackButton = styled(Button)`
 
 export default function Detail() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const expenses = useSelector((state) => state.expenses);
 
-  const selectedExpense = expenses.find((element) => element.id === id);
+  const { id } = useParams();
+
+  const {
+    data: selectedExpense,
+    isLoading,
+    error,
+  } = useQuery({ queryKey: ["expenses", id], queryFn: getExpense });
 
   const [date, setDate] = useState(selectedExpense.date);
   const [item, setItem] = useState(selectedExpense.item);
   const [amount, setAmount] = useState(selectedExpense.amount);
   const [description, setDescription] = useState(selectedExpense.description);
 
-  const handleEdit = () => {
+  useEffect(() => {
+    if (selectedExpense) {
+      setDate(selectedExpense.data);
+      setItem(selectedExpense.item);
+      setAmount(selectedExpense.amount);
+      setDescription(selectedExpense.description);
+    }
+  }, [selectedExpense]);
+
+  const mutationEdit = useMutation({
+    mutationFn: putExpense,
+    onSuccess: () => {
+      navigate("/");
+      //아래 함수가 실행되는 시점에
+      //모든 데이터가 refetch가 되고 화면이 리렌더링되어서 문제가 됐었다
+      //성공 시 홈으로를 위로 옮겨줌
+
+      queryClient.invalidateQueries(["expenses"]);
+    },
+  });
+
+  const mutationDelete = useMutation({
+    mutationFn: deleteExpense,
+    onSuccess: () => {
+      navigate("/");
+      queryClient.invalidateQueries(["expenses"]);
+    },
+  });
+
+  const editExpense = () => {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     if (!datePattern.test(date)) {
       alert("날짜를 YYYY-MM-DD 형식으로 입력해주세요.");
@@ -87,17 +115,15 @@ export default function Detail() {
       id: id,
       date: date,
       item: item,
-      amount: amount,
+      amount: parseInt(amount, 10),
       description: description,
     };
 
-    dispatch(editExpense(newExpense));
-    navigate("/");
+    mutationEdit.mutate(newExpense);
   };
 
   const handleDelete = () => {
-    dispatch(deleteExpense({ id }));
-    navigate("/");
+    mutationDelete.mutate(id);
   };
 
   return (
@@ -143,7 +169,7 @@ export default function Detail() {
         />
       </InputGroup>
       <ButtonGroup>
-        <Button onClick={handleEdit}>수정</Button>
+        <Button onClick={editExpense}>수정</Button>
         <Button danger="true" onClick={handleDelete}>
           삭제
         </Button>

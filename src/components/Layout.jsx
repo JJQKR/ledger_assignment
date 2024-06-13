@@ -70,12 +70,12 @@ const PageContainer = styled.div`
 export default function Layout({ user, setUser }) {
   //user가 undefined라고 해서 파라미터로 내가 넣어줬는데
   //이게 맞아?
-  //영상에는 setUser만 있음
+  //영상에는 만 있음
   const navigate = useNavigate();
 
   useEffect(() => {
     getUserInfo().then((res) => {
-      // console.log("useEffect내부", res)
+      console.log("useEffect내부", res);
       if (res) {
         //응답값이 무엇인가 있을 것이다
         //그렇디면?
@@ -84,7 +84,6 @@ export default function Layout({ user, setUser }) {
           nickname: res.nickname,
           avatar: res.avatar,
         });
-        console.log("useEffect내부", res);
       }
       //이렇게 넣어주자
       //그러면 새로고침시 null이 되더라도

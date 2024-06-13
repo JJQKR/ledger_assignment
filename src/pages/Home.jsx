@@ -4,8 +4,6 @@ import { useState, useContext } from "react";
 import MonthNavigation from "../components/MonthNavigation";
 import ExpenseList from "../components/ExpenseList";
 import CreateExpense from "../components/CreateExpense";
-import { useSelector } from "react-redux";
-import DashBoard from "../components/DashBoard";
 
 const Container = styled.main`
   max-width: 800px;
@@ -22,19 +20,24 @@ export const Section = styled.section`
   padding: 20px;
 `;
 
-export default function Home() {
+export default function Home({ user, expenses, setExpenses }) {
   const [month, setMonth] = useState(1);
-  const expenses = useSelector((state) => state.expenses);
 
   const filteredExpenses = expenses.filter(
     (expense) => expense.month === month
   );
 
+  //강의와 다르게 filter로직 ExpenseList로 안 옮기고 여기다 둠
+  //expenses 중복 선언 문제 있어서
+
+  //근데 지출데이터 등록 영상 마지막부분에
+  //expense랑 setExpense랑 filteredExpense 로직을 다 지운단말이야
+  //왜죠?
+
   return (
     <Container>
       <MonthNavigation month={month} setMonth={setMonth} />
-      <CreateExpense month={month} />
-      <DashBoard month={month} filteredExpenses={filteredExpenses} />
+      <CreateExpense user={user} month={month} />
       <ExpenseList expenses={filteredExpenses} />
     </Container>
   );
